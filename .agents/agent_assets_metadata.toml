@@ -1,0 +1,44 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "KgjMFwPwellQjPXQVHk41"
+uri = "file://artifacts/smart-wash/public/images/steam-hero.png"
+type = "image"
+title = "Steam Press hero image"
+
+[[generated]]
+id = "2rthie__KfJriyXOxqVVk"
+uri = "file://artifacts/smart-wash/public/images/dryclean-hero.png"
+type = "image"
+title = "Dry Cleaning hero image"
+
+[[generated]]
+id = "mw_H9EFEo7pcoZ1MihpqE"
+uri = "file://artifacts/smart-wash/public/images/washnfold-hero.png"
+type = "image"
+title = "Wash and Fold hero image"
+
+[[generated]]
+id = "5qYshKLf3BE2fVeJnXBJX"
+uri = "file://artifacts/smart-wash/public/images/premium-thumb.png"
+type = "image"
+title = "Premium Laundry thumbnail"
+
+[[generated]]
+id = "w_0ImGlIjAnadKYxBWoom"
+uri = "file://artifacts/smart-wash/public/images/steam-thumb.png"
+type = "image"
+title = "Steam Press thumbnail"
+
+[[generated]]
+id = "u06WPDkM_a0Ky9WkxnMQT"
+uri = "file://artifacts/smart-wash/public/images/dryclean-thumb.png"
+type = "image"
+title = "Dry Cleaning thumbnail"
+
+[[generated]]
+id = "0GpVuhEYG0Fb3phxNQiKk"
+uri = "file://artifacts/smart-wash/public/images/washnfold-thumb.png"
+type = "image"
+title = "Wash and Fold thumbnail"

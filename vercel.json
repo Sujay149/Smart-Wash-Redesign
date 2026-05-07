@@ -2,7 +2,7 @@
   "version": 2,
   "outputDirectory": "artifacts/smart-wash/dist/public",
   "builds": [
-    {
+    { 
       "src": "artifacts/smart-wash/package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }

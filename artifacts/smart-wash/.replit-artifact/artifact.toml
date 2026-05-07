@@ -15,11 +15,11 @@ paths = [ "/" ]
 localPort = 21174
 
 [services.development]
-run = "pnpm --filter @workspace/smart-wash run dev"
+run = "pnpm run dev"
 
 [services.production]
-build = [ "pnpm", "--filter", "@workspace/smart-wash", "run", "build" ]
-publicDir = "artifacts/smart-wash/dist/public"
+build = [ "pnpm", "run", "build" ]
+publicDir = "dist"
 serve = "static"
 
 [[services.production.rewrites]]
@@ -28,4 +28,3 @@ to = "/index.html"
 
 [services.env]
 PORT = "21174"
-BASE_PATH = "/"

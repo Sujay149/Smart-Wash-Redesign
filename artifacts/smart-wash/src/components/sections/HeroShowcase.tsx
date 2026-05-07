@@ -2,7 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const customEase = [0.76, 0, 0.23, 1];
-const duration = 1.2;
+const TRANSITION = { duration: 1.2, ease: customEase };
+
+const PANEL_HEIGHT = 140;
+const THUMB_H = 160;
+const THUMB_W = 110;
 
 const slides = [
   {
@@ -46,7 +50,12 @@ const slides = [
 export function HeroShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const autoPlayRef = useRef<NodeJS.Timeout>();
+  const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const goTo = (index: number) => {
+    if (isAnimating) return;
+    setCurrentIndex(index);
+  };
 
   const nextSlide = () => {
     if (isAnimating) return;
@@ -58,16 +67,11 @@ export function HeroShowcase() {
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  const handleManualAdvance = () => {
-    resetAutoPlay();
-    nextSlide();
-  };
-
   const resetAutoPlay = () => {
-    if (autoPlayRef.current) {
-      clearInterval(autoPlayRef.current);
-    }
-    autoPlayRef.current = setInterval(nextSlide, 4000);
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    autoPlayRef.current = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, 4000);
   };
 
   useEffect(() => {
@@ -75,7 +79,7 @@ export function HeroShowcase() {
     return () => {
       if (autoPlayRef.current) clearInterval(autoPlayRef.current);
     };
-  }, [currentIndex, isAnimating]);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -89,22 +93,26 @@ export function HeroShowcase() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [currentIndex, isAnimating]);
+  }, [isAnimating]);
 
   const currentSlide = slides[currentIndex];
 
   return (
-    <section 
+    <section
       id="home"
-      className="relative w-full h-[100vh] overflow-hidden select-none cursor-pointer"
-      onClick={handleManualAdvance}
+      className="relative w-full overflow-hidden select-none cursor-pointer"
+      style={{ height: "100svh" }}
+      onClick={() => {
+        resetAutoPlay();
+        nextSlide();
+      }}
     >
-      {/* Background Color Layers */}
+      {/* Background Color */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide.id + "-bg"}
           className="absolute inset-0 z-0"
-          initial={{ opacity: 0, scale: 1.05 }}
+          initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -114,22 +122,36 @@ export function HeroShowcase() {
         />
       </AnimatePresence>
 
+      {/* Grain overlay */}
       <div className="bg-noise" />
 
-      {/* Large Background Text */}
-      <div className="absolute inset-0 flex items-center justify-center z-10 overflow-hidden pointer-events-none">
+      {/* ─── LARGE BACKGROUND TEXT TRACK ─── */}
+      {/* Parent must NOT use flex centering — track starts at top:0 */}
+      <div
+        className="absolute inset-0 z-10 overflow-hidden pointer-events-none"
+        aria-hidden="true"
+      >
         <motion.div
-          className="flex flex-col w-full items-center"
-          animate={{ y: `-${currentIndex * 100}vh` }}
-          transition={{ duration, ease: customEase }}
+          className="flex flex-col w-full"
+          style={{ top: 0, left: 0, right: 0, position: "absolute" }}
+          animate={{ y: `${-currentIndex * 100}vh` }}
+          transition={TRANSITION}
         >
           {slides.map((slide) => (
-            <div 
-              key={slide.id} 
-              className="h-[100vh] w-full flex items-center justify-center flex-shrink-0"
+            <div
+              key={slide.id}
+              className="flex-shrink-0 flex items-center justify-center"
+              style={{ height: "100svh", width: "100%" }}
             >
-              <h1 
-                className="text-[18vw] md:text-[25vw] font-heading font-black text-white leading-[0.8] tracking-tighter text-gradient-mask select-none"
+              <h1
+                className="font-heading font-black text-white text-gradient-mask"
+                style={{
+                  fontSize: "clamp(80px, 22vw, 340px)",
+                  lineHeight: 0.85,
+                  letterSpacing: "-0.02em",
+                  userSelect: "none",
+                  whiteSpace: "nowrap",
+                }}
               >
                 {slide.themeText}
               </h1>
@@ -138,50 +160,72 @@ export function HeroShowcase() {
         </motion.div>
       </div>
 
-      {/* Hero Image / Video Center */}
-      <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none mt-12 md:mt-0">
+      {/* ─── CENTER HERO IMAGE / VIDEO ─── */}
+      <div
+        className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+        style={{ paddingTop: "72px" }}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide.id + "-hero"}
-            initial={{ opacity: 0, x: "5%", scale: 1.05 }}
+            initial={{ opacity: 0, x: "6%", scale: 1.05 }}
             animate={{ opacity: 1, x: "0%", scale: 1 }}
-            exit={{ opacity: 0, x: "-5%", scale: 0.95 }}
-            transition={{ duration, ease: customEase, delay: 0.1 }}
-            className="w-full max-w-4xl h-[50vh] md:h-[75vh] flex items-center justify-center"
+            exit={{ opacity: 0, x: "-6%", scale: 0.95 }}
+            transition={{ ...TRANSITION, delay: 0.15 }}
+            className="flex items-center justify-center"
+            style={{ height: "70vh", width: "auto", maxWidth: "80vw" }}
           >
             {currentSlide.useVideo ? (
-              <video 
-                autoPlay 
-                muted 
-                loop 
-                playsInline 
-                className="w-full h-full object-contain filter drop-shadow-2xl"
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{ height: "100%", width: "auto", objectFit: "contain", filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.4))" }}
                 src="https://bosmartwash.in/assets/images/hero.mp4"
               />
             ) : (
-              <img 
-                src={currentSlide.heroImage} 
-                alt={currentSlide.name} 
-                className="w-full h-full object-contain filter drop-shadow-2xl"
+              <img
+                src={(currentSlide as { heroImage?: string }).heroImage}
+                alt={currentSlide.name}
+                style={{ height: "100%", width: "auto", objectFit: "contain", filter: "drop-shadow(0 30px 60px rgba(0,0,0,0.4))" }}
               />
             )}
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Info Panel (Bottom Left) */}
-      <div className="absolute bottom-8 md:bottom-[60px] left-4 md:left-[60px] z-30 w-[280px] md:w-[360px] pointer-events-none">
-        <div className="overflow-hidden h-[140px] md:h-[120px]">
+      {/* ─── INFO PANEL — BOTTOM LEFT ─── */}
+      <div
+        className="absolute z-30 pointer-events-none"
+        style={{ bottom: 56, left: 48 }}
+      >
+        <div
+          className="overflow-hidden"
+          style={{ height: PANEL_HEIGHT, width: "min(340px, calc(100vw - 200px))" }}
+        >
           <motion.div
-            className="flex flex-col w-full"
-            animate={{ y: `-${currentIndex * (window.innerWidth < 768 ? 140 : 120)}px` }}
-            transition={{ duration, ease: customEase }}
+            className="flex flex-col"
+            animate={{ y: -currentIndex * PANEL_HEIGHT }}
+            transition={TRANSITION}
           >
             {slides.map((slide) => (
-              <div key={slide.id} className="h-[140px] md:h-[120px] flex-shrink-0 flex flex-col justify-end pb-2">
-                <h2 className="text-2xl md:text-3xl font-bold text-white font-sans uppercase tracking-widest">{slide.name}</h2>
-                <div className="w-12 h-px bg-white/40 my-3 md:my-4" />
-                <p className="text-white/80 text-xs md:text-sm leading-relaxed max-w-sm">
+              <div
+                key={slide.id}
+                className="flex flex-col justify-center"
+                style={{ height: PANEL_HEIGHT, flexShrink: 0 }}
+              >
+                <h2
+                  className="font-sans font-black text-white uppercase"
+                  style={{ fontSize: "clamp(16px, 2vw, 26px)", letterSpacing: "0.08em", marginBottom: 10 }}
+                >
+                  {slide.name}
+                </h2>
+                <div style={{ width: 48, height: 1, background: "rgba(255,255,255,0.4)", marginBottom: 10 }} />
+                <p
+                  className="text-white/80 leading-relaxed"
+                  style={{ fontSize: "clamp(11px, 1.1vw, 14px)", maxWidth: 320 }}
+                >
                   {slide.description}
                 </p>
               </div>
@@ -190,27 +234,43 @@ export function HeroShowcase() {
         </div>
       </div>
 
-      {/* Tagline (Right Center) */}
-      <div className="hidden md:block absolute right-[60px] top-1/2 -translate-y-1/2 z-30 pointer-events-none w-[200px]">
-        <h3 className="text-white font-semibold text-2xl uppercase tracking-widest font-heading leading-tight text-right">
+      {/* ─── TAGLINE — RIGHT CENTER ─── */}
+      <div
+        className="absolute z-30 pointer-events-none hidden md:block"
+        style={{ right: 48, top: "50%", transform: "translateY(-50%)", width: 180, textAlign: "right" }}
+      >
+        <h3
+          className="font-heading text-white uppercase"
+          style={{ fontSize: "clamp(14px, 1.4vw, 20px)", lineHeight: 1.2, letterSpacing: "0.05em" }}
+        >
           Fresh. Clean. Delivered.
         </h3>
       </div>
 
-      {/* Thumbnail (Bottom Right) */}
-      <div className="absolute bottom-8 md:bottom-[60px] right-4 md:right-[60px] z-30 pointer-events-none">
-        <div className="overflow-hidden rounded-xl h-[120px] w-[80px] md:h-[176px] md:w-[120px] shadow-2xl border border-white/10">
+      {/* ─── THUMBNAIL — BOTTOM RIGHT ─── */}
+      <div
+        className="absolute z-30 pointer-events-none hidden sm:block"
+        style={{ bottom: 56, right: 48 }}
+      >
+        <div
+          className="overflow-hidden rounded-xl shadow-2xl"
+          style={{ width: THUMB_W, height: THUMB_H, border: "1px solid rgba(255,255,255,0.15)" }}
+        >
           <motion.div
-            className="flex flex-col w-full"
-            animate={{ y: `-${currentIndex * (window.innerWidth < 768 ? 120 : 176)}px` }}
-            transition={{ duration, ease: customEase }}
+            className="flex flex-col"
+            animate={{ y: -currentIndex * THUMB_H }}
+            transition={TRANSITION}
           >
             {slides.map((slide) => (
-              <div key={slide.id} className="h-[120px] w-[80px] md:h-[176px] md:w-[120px] flex-shrink-0 bg-black/20">
-                <img 
-                  src={slide.thumbnail} 
-                  alt={`${slide.name} thumbnail`}
-                  className="w-full h-full object-cover"
+              <div
+                key={slide.id}
+                className="bg-black/20 flex-shrink-0"
+                style={{ width: THUMB_W, height: THUMB_H }}
+              >
+                <img
+                  src={slide.thumbnail}
+                  alt={slide.name}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </div>
             ))}
@@ -218,23 +278,30 @@ export function HeroShowcase() {
         </div>
       </div>
 
-      {/* Progress Indicators */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+      {/* ─── PROGRESS DOTS ─── */}
+      <div
+        className="absolute z-30 flex gap-3 items-center"
+        style={{ bottom: 24, left: "50%", transform: "translateX(-50%)" }}
+      >
         {slides.map((_, i) => (
           <button
             key={i}
             onClick={(e) => {
               e.stopPropagation();
-              setCurrentIndex(i);
+              goTo(i);
               resetAutoPlay();
             }}
-            className="group py-2 px-1 focus:outline-none"
             aria-label={`Go to slide ${i + 1}`}
+            style={{ background: "none", border: "none", padding: "8px 4px", cursor: "pointer" }}
           >
-            <div 
-              className={`h-1.5 rounded-full transition-all duration-500 ease-out ${
-                i === currentIndex ? "w-12 bg-white" : "w-4 bg-white/30 group-hover:bg-white/50"
-              }`} 
+            <div
+              style={{
+                height: 4,
+                borderRadius: 9999,
+                transition: "all 0.4s ease",
+                width: i === currentIndex ? 48 : 16,
+                background: i === currentIndex ? "white" : "rgba(255,255,255,0.35)",
+              }}
             />
           </button>
         ))}

@@ -1,12 +1,5 @@
 {
   "version": 2,
-  "outputDirectory": "artifacts/smart-wash/dist/public",
   "buildCommand": "pnpm install --no-frozen-lockfile && pnpm --filter ./artifacts/smart-wash run build",
-  "builds": [
-    { 
-      "src": "artifacts/smart-wash/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
-    }
-  ]
+  "outputDirectory": "artifacts/smart-wash/dist/public"
 }

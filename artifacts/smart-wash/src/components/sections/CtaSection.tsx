@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { CheckCircle, PhoneCall, Zap, Truck } from "lucide-react";
 
-export function CtaSection() {
+export function CtaSection({ onOpenBooking }: { onOpenBooking: () => void }) {
   const ref1 = useRef(null);
   const ref2 = useRef(null);
   const inView1 = useInView(ref1, { once: true, margin: "-80px" });
@@ -43,15 +43,13 @@ export function CtaSection() {
               <p className="text-white/60 text-lg leading-relaxed mb-10 max-w-md">
                 Easily schedule your laundry pickup at your convenience. Fast, reliable, and professional care — guaranteed.
               </p>
-              <a
-                href="https://bosmartwash.in/see.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-white text-slate-900 font-bold rounded-full px-8 py-4 text-base hover:bg-blue-50 transition-colors shadow-xl shadow-blue-900/30"
+              <button
+                onClick={onOpenBooking}
+                className="inline-flex items-center gap-3 bg-white text-slate-900 font-bold rounded-full px-8 py-4 text-base hover:bg-blue-50 transition-colors shadow-xl shadow-blue-900/30 cursor-pointer"
               >
                 Schedule Pickup Now
                 <span className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm">→</span>
-              </a>
+              </button>
             </motion.div>
 
             <motion.div
@@ -150,14 +148,12 @@ export function CtaSection() {
               </motion.a>
 
               <div>
-                <a
-                  href="https://bosmartwash.in/see.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-3 bg-primary text-white font-bold rounded-full px-10 py-4 text-base hover:bg-primary/90 transition-colors shadow-xl shadow-primary/25"
+                <button
+                  onClick={onOpenBooking}
+                  className="inline-flex items-center gap-3 bg-primary text-white font-bold rounded-full px-10 py-4 text-base hover:bg-primary/90 transition-colors shadow-xl shadow-primary/25 cursor-pointer"
                 >
                   Order Now
-                </a>
+                </button>
               </div>
             </motion.div>
           </div>

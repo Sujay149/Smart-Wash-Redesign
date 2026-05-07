@@ -47,7 +47,7 @@ const slides = [
   },
 ];
 
-export function HeroShowcase() {
+export function HeroShowcase({ onOpenBooking }: { onOpenBooking: () => void }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const autoPlayRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -193,6 +193,17 @@ export function HeroShowcase() {
             )}
           </motion.div>
         </AnimatePresence>
+      </div>
+
+      {/* ─── BOOK CTA — bottom center ─── */}
+      <div className="absolute z-30 bottom-16 left-1/2 -translate-x-1/2">
+        <button
+          onClick={(e) => { e.stopPropagation(); onOpenBooking(); }}
+          className="inline-flex items-center gap-2 bg-white text-slate-900 font-bold rounded-full px-7 py-3 text-sm shadow-xl hover:bg-blue-50 transition-colors"
+        >
+          Schedule Pickup Now
+          <span className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs">→</span>
+        </button>
       </div>
 
       {/* ─── INFO PANEL — BOTTOM LEFT ─── */}

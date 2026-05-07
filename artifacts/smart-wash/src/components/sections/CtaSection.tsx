@@ -1,94 +1,166 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { CheckCircle, PhoneCall } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { CheckCircle, PhoneCall, Zap, Truck } from "lucide-react";
 
 export function CtaSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const inView1 = useInView(ref1, { once: true, margin: "-80px" });
+  const inView2 = useInView(ref2, { once: true, margin: "-80px" });
 
   return (
     <>
-      {/* Banner CTA 1 */}
-      <section className="py-24 relative overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 opacity-20 pointer-events-none">
-          <img 
-            src="https://bosmartwash.in/assets/images/machinneeeeeeeeeeeeeee.jpg" 
-            alt="Washing Machine" 
-            className="w-full h-full object-cover mix-blend-overlay"
+      {/* ── BOOK SERVICES ── */}
+      <section className="relative py-28 overflow-hidden">
+        {/* Background image + overlays */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://bosmartwash.in/assets/images/machinneeeeeeeeeeeeeee.jpg"
+            alt=""
+            className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(13,20,60,0.96) 0%, rgba(13,110,253,0.88) 100%)" }} />
         </div>
-        
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              ref={ref}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6 }}
-            >
-              <h2 className="text-4xl md:text-6xl font-black font-heading text-white leading-tight mb-6">
-                Book Our Services
-              </h2>
-              <p className="text-slate-300 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
-                Easily schedule your laundry pickup at your convenience. Seamless service ensures a hassle-free experience with fast, reliable, and professional care.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row justify-center gap-6 mb-12">
-                <div className="flex items-center gap-3 bg-white/10 px-6 py-4 rounded-full backdrop-blur-sm border border-white/10 text-white">
-                  <CheckCircle className="w-6 h-6 text-primary" />
-                  <span className="font-semibold text-lg">Clean Result</span>
-                </div>
-                <div className="flex items-center gap-3 bg-white/10 px-6 py-4 rounded-full backdrop-blur-sm border border-white/10 text-white">
-                  <CheckCircle className="w-6 h-6 text-primary" />
-                  <span className="font-semibold text-lg">Fast Delivery</span>
-                </div>
-              </div>
 
-              <Button size="lg" className="rounded-full px-10 h-14 text-lg bg-primary hover:bg-primary/90 shadow-lg shadow-primary/25" asChild>
-                <a href="https://bosmartwash.in/see.html" target="_blank" rel="noopener noreferrer">
-                  Schedule Pickup Now
-                </a>
-              </Button>
+        {/* Decorative circle */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white/5 translate-x-1/3 pointer-events-none" />
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-white/5 translate-x-1/4 pointer-events-none" />
+
+        <div className="container mx-auto px-4 md:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center" ref={ref1}>
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={inView1 ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p className="text-blue-300 font-bold tracking-[0.2em] uppercase text-xs mb-6">Ready to get started?</p>
+              <h2
+                className="font-heading font-black text-white leading-none mb-6"
+                style={{ fontSize: "clamp(40px, 6vw, 80px)" }}
+              >
+                Book Our<br />Services
+              </h2>
+              <p className="text-white/60 text-lg leading-relaxed mb-10 max-w-md">
+                Easily schedule your laundry pickup at your convenience. Fast, reliable, and professional care — guaranteed.
+              </p>
+              <a
+                href="https://bosmartwash.in/see.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-white text-slate-900 font-bold rounded-full px-8 py-4 text-base hover:bg-blue-50 transition-colors shadow-xl shadow-blue-900/30"
+              >
+                Schedule Pickup Now
+                <span className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm">→</span>
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={inView1 ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            >
+              {[
+                {
+                  icon: <Zap className="w-6 h-6" />,
+                  title: "Clean Result",
+                  desc: "Advanced cleaning techniques for spotless, fresh clothes every time.",
+                },
+                {
+                  icon: <Truck className="w-6 h-6" />,
+                  title: "Fast Delivery",
+                  desc: "Quick, reliable delivery so your laundry is ready when you need it.",
+                },
+                {
+                  icon: <CheckCircle className="w-6 h-6" />,
+                  title: "Free Pickup",
+                  desc: "We come to your door at no extra charge — zero effort on your part.",
+                },
+                {
+                  icon: <PhoneCall className="w-6 h-6" />,
+                  title: "24/7 Support",
+                  desc: "Our team is always available to help with your laundry needs.",
+                },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={inView1 ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
+                  className="p-6 rounded-2xl hover:bg-white/10 transition-all duration-300 group"
+                  style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
+                >
+                  <div className="text-primary mb-4 group-hover:scale-110 transition-transform duration-300 inline-block">
+                    {item.icon}
+                  </div>
+                  <h4 className="text-white font-bold mb-2">{item.title}</h4>
+                  <p className="text-white/50 text-sm leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Banner CTA 2 */}
-      <section className="relative py-24 md:py-32 overflow-hidden bg-primary/95">
-        <div 
-          className="absolute inset-0 z-0 bg-fixed bg-center bg-cover opacity-30"
-          style={{ backgroundImage: 'url(https://bosmartwash.in/assets/images/cycle.jpg)' }}
-        />
-        <div className="absolute inset-0 bg-primary/80 mix-blend-multiply z-0" />
-        
-        <div className="container mx-auto px-4 md:px-6 relative z-10 text-center text-white">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto"
-          >
-            <h2 className="text-4xl md:text-6xl font-black font-heading leading-tight mb-8">
-              Quality Service with<br/>Free Collection & Delivery
-            </h2>
-            <a 
-              href="tel:+917997034445" 
-              className="inline-flex items-center justify-center gap-3 text-3xl md:text-4xl font-bold mb-12 hover:text-white/80 transition-colors"
+      {/* ── QUALITY + CONTACT ── */}
+      <section className="relative py-28 overflow-hidden" ref={ref2}>
+        {/* Background */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://bosmartwash.in/assets/images/cycle.jpg"
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-white/92" />
+        </div>
+
+        <div className="container mx-auto px-4 md:px-8 relative z-10">
+          <div className="max-w-3xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={inView2 ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8 }}
             >
-              <PhoneCall className="w-8 h-8 md:w-10 md:h-10" />
-              +91 7997034445
-            </a>
-            <div>
-              <Button size="lg" variant="secondary" className="rounded-full px-10 h-14 text-lg font-bold text-primary bg-white hover:bg-white/90 shadow-xl" asChild>
-                <a href="https://bosmartwash.in/see.html" target="_blank" rel="noopener noreferrer">
+              <p className="text-primary font-bold tracking-[0.2em] uppercase text-xs mb-6">Get In Touch</p>
+              <h2
+                className="font-heading font-black text-slate-900 leading-none mb-8"
+                style={{ fontSize: "clamp(36px, 5vw, 64px)" }}
+              >
+                Quality Service with<br />
+                <span className="text-primary">Free Collection & Delivery</span>
+              </h2>
+
+              {/* Phone number — big and bold */}
+              <motion.a
+                href="tel:+917997034445"
+                className="inline-flex items-center gap-4 mb-10 group"
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/30 group-hover:bg-primary/90 transition-colors">
+                  <PhoneCall className="w-7 h-7 text-white" />
+                </div>
+                <div className="text-left">
+                  <p className="text-slate-400 text-xs font-semibold uppercase tracking-widest mb-0.5">Call us anytime</p>
+                  <p className="font-heading font-black text-slate-900 leading-none"
+                    style={{ fontSize: "clamp(24px, 3.5vw, 44px)" }}>
+                    +91 7997034445
+                  </p>
+                </div>
+              </motion.a>
+
+              <div>
+                <a
+                  href="https://bosmartwash.in/see.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 bg-primary text-white font-bold rounded-full px-10 py-4 text-base hover:bg-primary/90 transition-colors shadow-xl shadow-primary/25"
+                >
                   Order Now
                 </a>
-              </Button>
-            </div>
-          </motion.div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
     </>

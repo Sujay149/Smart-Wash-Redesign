@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "outputDirectory": "artifacts/smart-wash/dist",
+  "outputDirectory": "artifacts/smart-wash/dist/public",
   "builds": [
     {
       "src": "artifacts/smart-wash/package.json",

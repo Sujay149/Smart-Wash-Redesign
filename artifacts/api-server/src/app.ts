@@ -5,31 +5,31 @@ import * as pinoHttpModule from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
 
-const pinoHttp = (pinoHttpModule as { default?: typeof pinoHttpModule.default }).default;
-
 const app: Express = express();
 
-if (typeof pinoHttp === "function") {
-  app.use(
-    pinoHttp({
-      logger,
-      serializers: {
-        req(req: IncomingMessage & { id?: string | number }) {
-          return {
-            id: req.id,
-            method: req.method,
-            url: req.url?.split("?")[0],
-          };
-        },
-        res(res: ServerResponse) {
-          return {
-            statusCode: res.statusCode,
-          };
-        },
+// pino-http ships a CJS default export that TypeScript resolves as a namespace.
+// Cast to any so the call signature is accepted by all tsconfig variants.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const pinoHttpMiddleware = (pinoHttpModule as any).default ?? pinoHttpModule;
+
+app.use(
+  pinoHttpMiddleware({
+    logger,
+    serializers: {
+      req(req: IncomingMessage & { id?: string | number }) {
+        return {
+          id: req.id,
+          method: req.method,
+          url: req.url?.split("?")[0],
+        };
       },
-    }),
-  );
-}
+      res(res: ServerResponse) {
+        return { statusCode: res.statusCode };
+      },
+    },
+  }),
+);
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

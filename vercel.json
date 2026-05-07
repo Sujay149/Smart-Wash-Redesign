@@ -1,9 +1,8 @@
 {
   "version": 2,
-  "rootDirectory": "artifacts",
   "builds": [
     {
-      "src": "smart-wash/package.json",
+      "src": "artifacts/smart-wash/package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
     }

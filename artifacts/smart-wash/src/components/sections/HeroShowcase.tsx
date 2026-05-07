@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const customEase = [0.76, 0, 0.23, 1];
-const TRANSITION = { duration: 1.2, ease: customEase };
+const customEase = [0.76, 0, 0.23, 1] as const;
+const TRANSITION = { duration: 1.2, ease: customEase as unknown as "easeInOut" };
 
 const PANEL_HEIGHT = 140;
 const THUMB_H = 160;
